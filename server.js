@@ -25,17 +25,6 @@ app.use(express.static(join(__dirname, "public")));
 //   issuerBaseURL: `https://dev-9tvm962i.us.auth0.com/`,
 // });
 
-
-// const checkJwt = auth({
-//     issuerBaseURL: 'https://dev-9tvm962i.us.auth0.com',
-//     baseURL: 'https://localhost',
-//     clientID: 'WVcKWJK1BtA1jv2syWHRpRAMwse731cL',
-//     secret: '2iUVdGbpq9NDEdaChY_IJc7jNTExfc3O-Vep7VVWtbgqjztQKq4pa3ht6pG2rDLn',
-//     audience: authConfig.audience,
-//     tokenSigningAlg: "RS256",
-//     idpLogout: true,
-//   });
-
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
