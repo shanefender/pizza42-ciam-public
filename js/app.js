@@ -36,6 +36,26 @@ const logout = () => {
   }
 };
 
+//Sign up redirect
+const signup = async (targetUrl) => {
+  try {
+    console.log("Signing up", targetUrl);
+
+    const options = {
+      redirect_uri: window.location.origin,
+      screen_hint: "signup"
+    };
+
+    if (targetUrl) {
+      options.appState = { targetUrl };
+    }
+
+    await auth0.loginWithRedirect(options);
+  } catch (err) {
+    console.log("Sign up failed", err);
+  }
+};
+
 /**
  * Retrieves the auth configuration from the server
  */
@@ -51,7 +71,8 @@ const configureClient = async () => {
   auth0 = await createAuth0Client({
     domain: config.domain,
     client_id: config.clientId,
-    audience: config.audience
+    audience: config.audience,
+    scope: 'update:order'
   });
 };
 

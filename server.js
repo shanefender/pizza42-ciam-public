@@ -6,7 +6,7 @@ const jwksRsa = require("jwks-rsa");
 const { join } = require("path");
 const authConfig = require("./auth_config.json");
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
-// const { auth } = require('express-openid-connect');
+// const { auth, requiredScopes, requiresAuth } = require('express-openid-connect');
 
 const app = express();
 
@@ -20,22 +20,9 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.static(join(__dirname, "public")));
 
-// const checkJwt = auth({
-//   audience: 'https://pizza-42-ciam.herokuapp.com',
-//   issuerBaseURL: `https://dev-9tvm962i.us.auth0.com/`,
-// });
-
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
-  }),
-
-  audience: authConfig.audience,
-  issuer: `https://${authConfig.domain}/`,
-  algorithms: ["RS256"]
+const checkJwt = auth({
+  audience: 'https://pizza-42-ciam.herokuapp.com',
+  issuerBaseURL: `https://dev-9tvm962i.us.auth0.com/`,
 });
 
 app.get("/api/external", checkJwt, requiredScopes('update:order'), (req, res) => {
